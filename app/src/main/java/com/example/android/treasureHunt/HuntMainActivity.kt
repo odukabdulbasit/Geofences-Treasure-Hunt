@@ -316,8 +316,23 @@ class HuntMainActivity : AppCompatActivity() {
      * Removes geofences. This method should be called after the user has granted the location
      * permission.
      */
-    private fun removeGeofences() {
+    /*private fun removeGeofences() {
         // TODO: Step 12 add in code to remove the geofences
+    }*/
+    private fun removeGeofences() {
+        if (!foregroundAndBackgroundLocationPermissionApproved()) {
+            return
+        }
+        geofencingClient.removeGeofences(geofencePendingIntent)?.run {
+            addOnSuccessListener {
+                Log.d(TAG, getString(R.string.geofences_removed))
+                Toast.makeText(applicationContext, R.string.geofences_removed, Toast.LENGTH_SHORT)
+                    .show()
+            }
+            addOnFailureListener {
+                Log.d(TAG, getString(R.string.geofences_not_removed))
+            }
+        }
     }
     companion object {
         internal const val ACTION_GEOFENCE_EVENT =
